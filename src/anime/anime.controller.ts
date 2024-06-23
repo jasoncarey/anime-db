@@ -8,9 +8,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateAnimeDto } from './dto/create-anime.dto';
+import { CreateAnimeDto } from './anime.dto';
 import { AnimeService } from './anime.service';
-import { Anime } from './interfaces/anime.interface';
+import { Anime } from './anime.interface';
 
 @Controller('anime')
 export class AnimeController {
