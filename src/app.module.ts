@@ -1,10 +1,24 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
+import { AnimeModule } from './anime/anime.module';
+import { LoggerMiddleware } from './middleware/logger.middleware';
+import { AnimeController } from './anime/anime.controller';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [AnimeModule],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .exclude(
+        { path: 'anime', method: RequestMethod.GET },
+        { path: 'anime', method: RequestMethod.POST },
+      )
+      .forRoutes(AnimeController);
+  }
+}
