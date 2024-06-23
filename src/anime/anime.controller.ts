@@ -4,11 +4,10 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateAnimeDto } from './anime.dto';
+import { CreateAnimeDto, UpdateAnimeDto } from './anime.dto';
 import { AnimeService } from './anime.service';
 import { Anime } from './anime.interface';
 
@@ -36,7 +35,7 @@ export class AnimeController {
    * Retrieve a single anime record
    */
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Anime | null> {
+  async findOne(@Param('id') id: number): Promise<Anime | null> {
     return this.animeService.findOne(id);
   }
 
@@ -44,16 +43,15 @@ export class AnimeController {
    * Update an anime record
    */
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAnimeDto: CreateAnimeDto) {
-    console.log(updateAnimeDto);
-    return `This action updates a #${id} anime`;
+  update(@Param('id') id: number, @Body() updateAnimeDto: UpdateAnimeDto) {
+    return this.animeService.update(id, updateAnimeDto);
   }
 
   /**
    * Delete an anime record
    */
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} anime`;
+  remove(@Param('id') id: number) {
+    return this.animeService.remove(id);
   }
 }
