@@ -1,7 +1,7 @@
 export interface Anime {
-  name: string;
+  title: string;
   description: string;
   releaseYear: string;
-  genre: string;
+  genre: string[];
   studio: string;
 }

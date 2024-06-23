@@ -1,19 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { Anime } from './interfaces/anime.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Anime } from './entities/anime.entity';
+import { CreateAnimeDto } from './dto/create-anime.dto';
 
 @Injectable()
 export class AnimeService {
-  private readonly anime: Anime[] = [];
+  constructor(
+    @InjectRepository(Anime)
+    private animeRepository: Repository<Anime>,
+  ) {}
 
-  create(anime: Anime) {
-    this.anime.push(anime);
+  async create(createAnimeDto: CreateAnimeDto): Promise<Anime> {
+    const anime = this.animeRepository.create(createAnimeDto);
+    return this.animeRepository.save(anime);
   }
 
-  findAll(): Anime[] {
-    return this.anime;
+  findAll(): Promise<Anime[]> {
+    return this.animeRepository.find();
   }
 
-  findOne(id: number): Anime {
-    return this.anime[id];
+  findOne(id: number): Promise<Anime | null> {
+    return this.animeRepository.findOneBy({ id });
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.animeRepository.delete(id);
   }
 }
