@@ -8,7 +8,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateAnimeDto, UpdateAnimeDto } from './dto';
+import { CreateAnimeDto } from './dto';
 import { AnimeService } from './anime.service';
 import { Anime } from './interfaces/anime.interface';
 
@@ -16,6 +16,9 @@ import { Anime } from './interfaces/anime.interface';
 export class AnimeController {
   constructor(private animeService: AnimeService) {}
 
+  /**
+   * Create a new anime record
+   */
   @Post()
   create(@Body() createAnimeDto: CreateAnimeDto) {
     console.log(createAnimeDto);
@@ -29,12 +32,11 @@ export class AnimeController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Anime> {
-    //throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     return this.animeService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAnimeDto: UpdateAnimeDto) {
+  update(@Param('id') id: string, @Body() updateAnimeDto: CreateAnimeDto) {
     console.log(updateAnimeDto);
     return `This action updates a #${id} anime`;
   }
